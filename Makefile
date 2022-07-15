@@ -36,7 +36,7 @@ ifeq ($(UNAME_S), linux)
 LIB			:= -lboost_$(PY)$(PYVER) -l$(PY).$(PYVER)
 INC         := -I$(INCDIR) -I/usr/include -I/usr/include/$(PY).$(PYVER)
 else
-LIB			:= -lws2_32  -lboost_$(PY)$(PYVER)-mt -l$(PY).$(PYVER)
+LIB			:= -lws2_32 -lboost_$(PY)$(PYVER)-mt -l$(PY).$(PYVER)
 INC         := -I$(INCDIR) -I/usr/include -I/mingw64/include/$(PY).$(PYVER)
 endif
 

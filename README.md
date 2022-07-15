@@ -26,7 +26,7 @@ import numpy as np
 
 # Variables
 ip = '192.168.0.1'
-port = 3 #serial port
+port = 1234 #serial port
 len = 64 #size of the buffer to read
 data = np.array([0, 1, 2, 3, 4, 5], dtype=np.single) #buffer to write
 

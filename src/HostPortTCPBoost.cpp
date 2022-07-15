@@ -15,14 +15,15 @@ bool (HostPortTCP::*begin2args)(std::string, unsigned short) = &HostPortTCP::beg
 bool (HostPortTCP::*begin4args)(std::string, unsigned short, unsigned int, unsigned int) = &HostPortTCP::begin;
 bool (HostPortTCP::*begin5args)(std::string, unsigned short, unsigned int, unsigned int, unsigned int) = &HostPortTCP::begin;
 
-
 // python module
-BOOST_PYTHON_MODULE(hostportsocket)
+BOOST_PYTHON_MODULE(hostporttcp)
 {   
+    
+    sockpp::socket_initializer sockInit;
 
     //HostPortTCP class
     class_<HostPortTCP>("HostPortTCP")
-         /*.def("begin", begin2args)
+        .def("begin", begin2args)
         .def("begin", begin4args)
         .def("begin", begin5args)
         .def("restart", &HostPortTCP::restart)
@@ -42,7 +43,6 @@ BOOST_PYTHON_MODULE(hostportsocket)
         .def("setTerminator", &HostPortTCP::setTerminator)
         .def("setTimeout", &HostPortTCP::setTimeout)
         .def(self_ns::str(self)) //operator <<
-        */
         .def_readonly("header", &HostPortTCP::HEADER)
         .def_readonly("terminator", &HostPortTCP::TERMINATOR)
         .def_readonly("timeout", &HostPortTCP::TIMEOUT)

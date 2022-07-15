@@ -4,6 +4,14 @@
 
 #include "HostPortTCP.h"
 
+HostPortTCP::HostPortTCP() {
+    client = std::make_shared<sockpp::tcp_connector>();
+}
+
+HostPortTCP::~HostPortTCP() {
+    if (*client) client->close();
+}
+
 //Begins
 bool HostPortTCP::begin(std::string ipaddr, unsigned short port) {
     _terminator = TERMINATOR;
@@ -44,13 +52,9 @@ bool HostPortTCP::begin(std::string ipaddr, unsigned short port, unsigned int he
     return false;
 }
 
-HostPortTCP::~HostPortTCP() {
-    client.close();
-}
-
 //set/get funs
 bool HostPortTCP::isInit(void) {
-    return (bool)client;
+    return (bool) *client;
 }
 bool HostPortTCP::setPort(unsigned short port) {
     //if (!serial) {
@@ -105,10 +109,10 @@ unsigned int HostPortTCP::getTimeout(void) {
 
 //reset & close fun
 bool HostPortTCP::close(void) {
-    return client.close();
+    return client->close();
 }
 bool HostPortTCP::restart(void) {
-    client.close();
+    client->close();
     return init(_ip, _port, _timeout);
 }
 
@@ -122,7 +126,7 @@ bool HostPortTCP::flush(void) {
 //write
 bool HostPortTCP::write(unsigned char* packetPtr, unsigned int size) {
 
-    if (!client) {
+    if (!(*client)) {
         return false;
     }
     
@@ -150,7 +154,7 @@ bool HostPortTCP::write(unsigned char* packetPtr, unsigned int size) {
     _tx_buf[c++] = (_terminator >> 24) & MASK;
 
     //put start bytes in buf
-    client.write_n(_tx_buf, c);
+    client->write_n(_tx_buf, c);
 
     //free
     free(_tx_buf);
@@ -174,7 +178,7 @@ bool HostPortTCP::read(unsigned char* packetPtr, unsigned int size) {
     unsigned char b;
     while (1) {
         if (c < 4) { //check header
-            if (client.read_n(&b, 1)>0) {
+            if (client->read_n(&b, 1)>0) {
                 if (b == ((_header >> (8 * c)) & MASK)) {
                     c++;
                     continue;
@@ -183,13 +187,13 @@ bool HostPortTCP::read(unsigned char* packetPtr, unsigned int size) {
                 return false; 
             }
         } else if (c==4) { //read data
-            if (client.read_n(packetPtr, size) == 0) {
+            if (client->read_n(packetPtr, size) == 0) {
                 return false; 
             };
             c++;
             continue;
         } else {
-            if (client.read_n(&b, 1) > 0) {
+            if (client->read_n(&b, 1) > 0) {
                 if (b == ((_terminator >> (8 * (c - 5))) & MASK)) {
                     c++;
                     if (c == 9) { //all ok
@@ -208,12 +212,12 @@ bool HostPortTCP::read(unsigned char* packetPtr, unsigned int size) {
 
 //init
 bool HostPortTCP::init(std::string ipaddr, unsigned short port, unsigned int timeout) { 
-    client.connect({ipaddr, port});
-    if (client) {
-        client.read_timeout(std::chrono::milliseconds(timeout));
-        client.write_timeout(std::chrono::milliseconds(timeout));
+    client->connect({ipaddr, port});
+    if (*(client)) {
+        client->read_timeout(std::chrono::milliseconds(timeout));
+        client->write_timeout(std::chrono::milliseconds(timeout));
     }
-    return (bool) client;
+    return (bool) *client;
 }
 
 //readpy

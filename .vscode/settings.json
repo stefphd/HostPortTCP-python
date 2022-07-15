@@ -103,6 +103,7 @@
         "variant": "cpp",
         "charconv": "cpp",
         "format": "cpp",
-        "tcp_connector.h": "c"
+        "tcp_connector.h": "c",
+        "*.ipp": "cpp"
     }
 }

@@ -4,6 +4,7 @@
 
 #include <memory> 
 #include <string>
+#include <iostream>
 #include "sockpp/tcp_connector.h"
 #include "sockpp/version.h"
 
@@ -185,7 +186,7 @@ public:
         \return The stream object.
     */
     friend std::ostream& operator<<(std::ostream& os, HostPortTCP hp) {
-        os << "HostPort at:\t0x" << std::hex << (uint64_t) &hp << std::dec << std::endl;
+        os << "HostPortTCP at:\t0x" << std::hex << (uint64_t) &hp << std::dec << std::endl;
         if (!hp.isInit()) {
             os << "IP:\t" << "Undefined" << std::endl;
             os << "Port:\t\t" << "Undefined" << std::endl;
@@ -220,9 +221,8 @@ public:
 
 private:
     //static constexpr unsigned int TX_BUF_SIZE = 1024; //!< Size of the output buffer.
-    sockpp::socket_initializer sockInit;
     static constexpr unsigned int MASK = 0xFF; //!< Mask for parsing.
-    sockpp::tcp_connector client; //!< Socket object.
+    std::shared_ptr<sockpp::tcp_connector> client; //!< Pointer to socket object.
     unsigned int _port = 0; //!< Socket port.
     std::string _ip = ""; //!< IP address.
     unsigned int _terminator = 0; //!< Terminator bytes.
