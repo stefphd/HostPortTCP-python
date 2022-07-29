@@ -21,7 +21,7 @@ Usage for the Host Port TCP class is (requires `numpy`):
 
 ```python
 # Import the python modules
-import HostPortTCP
+import hostporttcp
 import numpy as np
 
 # Variables
@@ -31,7 +31,7 @@ len = 64 #size of the buffer to read
 data = np.array([0, 1, 2, 3, 4, 5], dtype=np.single) #buffer to write
 
 # Instantiate a new object
-h = HostPortTCP.HostPortTCP()
+h = hostporttcp.HostPortTCP()
 
 # Start the communication
 flag = h.begin(ip, port)
